@@ -540,7 +540,7 @@ on quit:
 
 #Check for update
 every 10 seconds:
-	if text from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/version.yml" is not "version: 1.0":
+	if text from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/version.yml" is not "version: 2.0":
 		download from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/ServerEssentials.sk" to "plugins/Skript/scripts/ServerEssentials.sk"
 		wait 5 ticks
 		execute console command "/skript reload ServerEssentials.sk"
