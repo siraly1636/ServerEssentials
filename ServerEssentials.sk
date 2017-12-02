@@ -29,7 +29,7 @@ options:
 	prefix: ServerEssentials
 	nopermission: &4Nincs jogod ehez a parancshoz.
 	plugins: &fPlugins (1): &aServerEssentials by: siraly1636
-	version: &av1.0 &4(Beta)
+	version: &av2.0 &4(Beta)
 
 	gamemode: &6új játékmódja
 	survival: Túlélő
