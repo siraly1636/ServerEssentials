@@ -194,7 +194,7 @@ command /serveressentials [<text>] [<text>]:
 		if arg-1 is "reload":
 			execute console command "sk reload ServerEssentials"
 			send "&6{@prefix} reloaded. By: siraly1636"
-		if arg-1 is not "reload" or "install" or "version":
+		if arg-1 is not "reload" or "install" or "version" or "ver":
 			send "&cHasználat: /servess reload"
 		if arg-1 is "install":
 			if arg-2 is not set:
