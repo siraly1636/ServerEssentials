@@ -29,7 +29,7 @@ options:
 	prefix: ServerEssentials
 	nopermission: &4Nincs jogod ehez a parancshoz.
 	plugins: &fPlugins (1): &aServerEssentials by: siraly1636
-	version: &av2.0 &4(Beta)
+	version: &av2.1 &4(Beta)
 
 	gamemode: &6új játékmódja
 	survival: Túlélő
@@ -540,7 +540,7 @@ on quit:
 
 #Check for update
 every 10 seconds:
-	if text from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/version.yml" is not "version: 2.0":
+	if text from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/version.yml" is not "version: 2.1":
 		download from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/ServerEssentials.sk" to "plugins/Skript/scripts/ServerEssentials.sk"
 		wait 5 ticks
 		execute console command "/skript reload ServerEssentials.sk"
