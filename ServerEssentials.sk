@@ -315,7 +315,7 @@ command /sun:
 	permission: servess.sun
 	permission message: {@nopermission}
 	trigger:
-		execute console command "weather clear"
+		make player execute command "weather clear"
 		send "&6Az idő átállítva naposra."
 
 command /day:
