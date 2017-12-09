@@ -20,7 +20,7 @@
 ## Telepítés
 1. A skriptet másold be a `"plugins/Skript/scrits"` mappába.
 2. Indíts újra a Skriptet `"/sk reload ServerEssentials"`.
-3. A `"/serveressentials install 1.8"` parancsal fel tudod telepíteni a pluginokat.
+3. A `"/serveressentials install 1.8"` paranccsal fel tudod telepíteni a pluginokat.
 4. Indítsd újra a szerveredet.
 5. Élvezd a skriptet.
 
