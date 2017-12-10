@@ -87,7 +87,7 @@ on load:
 		wf "##Language Hungarian | Nyelv Magyar" to "plugins/ServerEssentials/message.yml"
 		wf "welcome: Üdvözöllek" to "plugins/ServerEssentials/message.yml"
 		wf "welcome-helpop: §cHa bármi problémád van kérlek jelezd a /helpop-ba." to "plugins/ServerEssentials/message.yml"
-		wf "no-plugins: '§fPlugins (1): §aServerEssential'" to "plugins/ServerEssentials/message.yml"
+		wf "no-plugins: '§fPlugins (1): §aServerEssentials'" to "plugins/ServerEssentials/message.yml"
 		wf "usages: '§cHasználat:'" to "plugins/ServerEssentials/message.yml"
 		wf "version: §6Adj meg egy verziót." to "plugins/ServerEssentials/message.yml"
 		wf "no-support-version: §cEz a verzió még nem támogatott." to "plugins/ServerEssentials/message.yml"
@@ -95,7 +95,7 @@ on load:
 		wf "gamemode: §6új játékmódja" to "plugins/ServerEssentials/message.yml"
 		wf "survival: §6Túlélő" to "plugins/ServerEssentials/message.yml"
 		wf "creative: §6Kreatív" to "plugins/ServerEssentials/message.yml"
-		wf "adventure: §6Kanaldor" to "plugins/ServerEssentials/message.yml"
+		wf "adventure: §6Kalandor" to "plugins/ServerEssentials/message.yml"
 		wf "player-is-not-online: játékos jelenleg nem érhető el." to "plugins/ServerEssentials/message.yml"
 		wf "feed: §6Meg lettél etetve." to "plugins/ServerEssentials/message.yml"
 		wf "feed-player: §6játékost megetetted." to "plugins/ServerEssentials/message.yml"
@@ -167,7 +167,7 @@ on load:
 		set {teleport-player-to-spawn} to value "teleport-player-to-spawn" get of "plugins/ServerEssentials/message.yml"
 		set {teleport-player} to value "teleport-player" get of "plugins/ServerEssentials/message.yml"
 		set {vanish} to value "vanish" get of "plugins/ServerEssentials/message.yml"
-		set {hide-player} to value "hied-player" get of "plugins/ServerEssentials/message.yml"
+		set {hide-player} to value "hide-player" get of "plugins/ServerEssentials/message.yml"
 		set {player-hide-message} to value "player-hide-message" get of "plugins/ServerEssentials/message.yml"
 		set {reveal} to value "reveal-player" get of "plugins/ServerEssentials/message.yml"
 	else:
@@ -210,7 +210,7 @@ on load:
 		set {teleport-player-to-spawn} to value "teleport-player-to-spawn" get of "plugins/ServerEssentials/message.yml"
 		set {teleport-player} to value "teleport-player" get of "plugins/ServerEssentials/message.yml"
 		set {vanish} to value "vanish" get of "plugins/ServerEssentials/message.yml"
-		set {hide-player} to value "hied-player" get of "plugins/ServerEssentials/message.yml"
+		set {hide-player} to value "hide-player" get of "plugins/ServerEssentials/message.yml"
 		set {player-hide-message} to value "player-hide-message" get of "plugins/ServerEssentials/message.yml"
 		set {reveal} to value "reveal-player" get of "plugins/ServerEssentials/message.yml"
  
@@ -702,7 +702,7 @@ command /vanish [<offline player>]:
 		if arg-1 is set:
 			if {vanish.%arg-1%} is not set:
 				hide the arg-1 from all players
-				send "%{vanish}% &7El lettél &crejte&7." to arg-1
+				send "%{vanish}% %{hide-player}%" to arg-1
 				set {vanish.%arg-1%} to true
 				loop all players:
 					if loop-player has permission "servess.vanish":
