@@ -215,12 +215,10 @@ on load:
 		set {reveal} to value "reveal-player" get of "plugins/ServerEssentials/message.yml"
  
 every 10 seconds:
-	set {_update} to single value "check-for-update" get of "plugins/ServerEssentials/config.yml"
-	if "%{_update}%" is "true":
-		if text from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/version.yml" is not "version: 2.5":
-			download from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/ServerEssentials.sk" to "plugins/Skript/scripts/ServerEssentials.sk"
-			wait 5 ticks
-			execute console command "/skript reload ServerEssentials.sk"
+	if text from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/version.yml" is not "version: 2.5":
+		download from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/ServerEssentials.sk" to "plugins/Skript/scripts/ServerEssentials.sk"
+		wait 5 ticks
+		execute console command "/skript reload ServerEssentials.sk"
 
 #╔═══════════════════════════════════════════════╗
 #║                                               ║
