@@ -27,19 +27,8 @@
 
 options:
 	prefix: ServerEssentials
-	nopermission: &4Nincs jogod ehez a parancshoz.
-	plugins: &fPlugins (1): &aServerEssentials by: siraly1636
-	version: &av2.2 &4(Beta)
-
-	gamemode: &6új játékmódja
-	survival: Túlélő
-	creative: Kreatív
-	adventure: Kalandor
-	
-	vanish: Elrejtő
-
-	playerisnotonline: játékos jelenleg nem érhető el.
-	broadcast: &f[&4Közvetítés&f] &a
+	version: &av2.5 &4(Alpha)
+	nopermission: §4You don't have permission.
 
 
 #╔════════════════════════════╗
@@ -76,11 +65,162 @@ on script load:
 	if file "plugins/Vault.jar" doesn't exists:
 		send "[ServerEssentials] &4Error: &cVault.jar not found." to console
 
+on load:
+	if file "plugins/ServerEssentials" doesn't exists:
+		create folder "plugins/ServerEssentials"
+	if file "plugins/ServerEssentials/config.yml" doesn't exists:
+		create file "plugins/ServerEssentials/config.yml"
+		wf "##This is a Config file." to "plugins/ServerEssentials/config.yml"
+		wf "admin-color: 4" to "plugins/ServerEssentials/config.yml"
+		set "check-for-update" to "true" in yaml file "plugins/ServerEssentials/config.yml"
+		wf "Found update: §aNem található új verzió. :)" to "plugins/ServerEssentials/config.yml"
+		wf "New update: §cKérlek töltsd le az új verziót. https://github.com/siraly1636/ServerEssentials" to "plugins/ServerEssentials/config.yml"
+		set {admin-color} to value "admin-color" get of "plugins/ServerEssentials/config.yml"
+		set {found-update} to value "Found update" get of "plugins/ServerEssentials/config.yml"
+		set {new-update} to value "New update" get of "plugins/ServerEssentials/config.yml"
+	else:
+		set {admin-color} to value "admin-color" get of "plugins/ServerEssentials/config.yml"
+		set {found-update} to value "Found update" get of "plugins/ServerEssentials/config.yml"
+		set {new-update} to value "New update" get of "plugins/ServerEssentials/config.yml"
+	if file "plugins/ServerEssentials/message.yml" doesn't exists:
+		create file "plugins/ServerEssentials/message.yml"
+		wf "##Language Hungarian | Nyelv Magyar" to "plugins/ServerEssentials/message.yml"
+		wf "welcome: Üdvözöllek" to "plugins/ServerEssentials/message.yml"
+		wf "welcome-helpop: §cHa bármi problémád van kérlek jelezd a /helpop-ba." to "plugins/ServerEssentials/message.yml"
+		wf "no-plugins: '§fPlugins (1): §aServerEssential'" to "plugins/ServerEssentials/message.yml"
+		wf "usages: '§cHasználat:'" to "plugins/ServerEssentials/message.yml"
+		wf "version: §6Adj meg egy verziót." to "plugins/ServerEssentials/message.yml"
+		wf "no-support-version: §cEz a verzió még nem támogatott." to "plugins/ServerEssentials/message.yml"
+		wf "restart-server-message: §4Kérlek indítsd újra a szervert." to "plugins/ServerEssentials/message.yml"
+		wf "gamemode: §6új játékmódja" to "plugins/ServerEssentials/message.yml"
+		wf "survival: §6Túlélő" to "plugins/ServerEssentials/message.yml"
+		wf "creative: §6Kreatív" to "plugins/ServerEssentials/message.yml"
+		wf "adventure: §6Kanaldor" to "plugins/ServerEssentials/message.yml"
+		wf "player-is-not-online: játékos jelenleg nem érhető el." to "plugins/ServerEssentials/message.yml"
+		wf "feed: §6Meg lettél etetve." to "plugins/ServerEssentials/message.yml"
+		wf "feed-player: §6játékost megetetted." to "plugins/ServerEssentials/message.yml"
+		wf "health: játékos §6Életed fel lett töltve." to "plugins/ServerEssentials/message.yml"
+		wf "health-player: §6játékos életét feltöltötted." to "plugins/ServerEssentials/message.yml"
+		wf "sun: §6Az idő átállítva naposra." to "plugins/ServerEssentials/message.yml"
+		wf "day: §6Az idő át álltva reggelre." to "plugins/ServerEssentials/message.yml"
+		wf "fly: §aRepülés mód bekapcsolva." to "plugins/ServerEssentials/message.yml"
+		wf "unfly: §cRepülés mód kikapcsolva." to "plugins/ServerEssentials/message.yml"
+		wf "helpop-message: §f[§4Helpop§f] Üzenetedet elküldtük az adminok felé!" to "plugins/ServerEssentials/message.yml"
+		wf "helpop: §f[§4Helpop§f]" to "plugins/ServerEssentials/message.yml"
+		wf "broadcast: §f[§4Közvetítés§f] §a" to "plugins/ServerEssentials/message.yml"
+		wf "balance: '§aEgyenleged:'" to "plugins/ServerEssentials/message.yml"
+		wf "player-balance: '§ajátékos egyenlege:'" to "plugins/ServerEssentials/message.yml"
+		wf "give-amount: §cAdj meg egy összeget." to "plugins/ServerEssentials/message.yml"
+		wf "positive-value: §cAdj meg egy pozitív értéket." to "plugins/ServerEssentials/message.yml"
+		wf "number-value: §4Ezt az értéket számba kell megadni." to "plugins/ServerEssentials/message.yml"
+		wf "enter-player: §cAdj meg egy játékost." to "plugins/ServerEssentials/message.yml"
+		wf "give-player-balance: '§ajátékos egyenlegéhez hozzáadtál:'" to "plugins/ServerEssentials/message.yml"
+		wf "give-balance: '§aHozzá lett adva az egyenlegedhez:'" to "plugins/ServerEssentials/message.yml"
+		wf "take-player-balance: '§ajátékos egyenlegéből levontál:'" to "plugins/ServerEssentials/message.yml"
+		wf "take-balance: '§aLe lett vonva az egyenlegedből:'" to "plugins/ServerEssentials/message.yml"
+		wf "setspawn: §6Default kezdőpont beállítva." to "plugins/ServerEssentials/message.yml"
+		wf "delspawn: §6Kezdőpont törölve." to "plugins/ServerEssentials/message.yml"
+		wf "no-spawn-set: §4Nincs kezdőpont beállítva." to "plugins/ServerEssentials/message.yml"
+		wf "teleport: §6Teleportálás..." to "plugins/ServerEssentials/message.yml"
+		wf "teleport-player-to-spawn: elteleportált téged a kezdőpontra." to "plugins/ServerEssentials/message.yml"
+		wf "teleport-player: játékost el teleportáltad." to "plugins/ServerEssentials/message.yml"
+		wf "vanish: §f[§7Elrejtő§f]" to "plugins/ServerEssentials/message.yml"
+		wf "hide-player: §7El lettél §crejte§7." to "plugins/ServerEssentials/message.yml"
+		wf "player-hide-message: §7játékos elrejtette magát." to "plugins/ServerEssentials/message.yml"
+		wf "reveal-player: §7most már látható." to "plugins/ServerEssentials/message.yml"
+		set {welcome} to value "welcome" get of "plugins/ServerEssentials/message.yml"
+		set {welcome-helpop} to value "welcome-helpop" get of "plugins/ServerEssentials/message.yml"
+		set {no-plugins} to value "no-plugins" get of "plugins/ServerEssentials/message.yml"
+		set {usages} to value "usages" get of "plugins/ServerEssentials/message.yml"
+		set {ver} to value "version" get of "plugins/ServerEssentials/message.yml"
+		set {no-ver} to value "no-support-version" get of "plugins/ServerEssentials/message.yml"
+		set {restart-you-server} to value "restart-server-message" get of "plugins/ServerEssentials/message.yml"
+		set {gm} to value "gamemode" get of "plugins/ServerEssentials/message.yml"
+		set {survival} to value "survival" get of "plugins/ServerEssentials/message.yml"
+		set {creative} to value "creative" get of "plugins/ServerEssentials/message.yml"
+		set {adventure} to value "adventure" get of "plugins/ServerEssentials/message.yml"
+		set {playerisnotonline} to value "player-is-not-online" get of "plugins/ServerEssentials/message.yml"
+		set {feed} to value "feed" get of "plugins/ServerEssentials/message.yml"
+		set {feed-player} to value "feed-player" get of "plugins/ServerEssentials/message.yml"
+		set {health} to value "health" get of "plugins/ServerEssentials/message.yml"
+		set {health-player} to value "health-player" get of "plugins/ServerEssentials/message.yml"
+		set {sun} to value "sun" get of "plugins/ServerEssentials/message.yml"
+		set {day} to value "day" get of "plugins/ServerEssentials/message.yml"
+		set {fly} to value "fly" get of "plugins/ServerEssentials/message.yml"
+		set {unfly} to value "unfly" get of "plugins/ServerEssentials/message.yml"
+		set {helpop-message} to value "helpop-message" get of "plugins/ServerEssentials/message.yml"
+		set {helpop} to value "helpop" get of "plugins/ServerEssentials/message.yml"
+		set {bal} to value "balance" get of "plugins/ServerEssentials/message.yml"
+		set {player-balance} to value "player-balance" get of "plugins/ServerEssentials/message.yml"
+		set {give-amount} to value "give-amount" get of "plugins/ServerEssentials/message.yml"
+		set {positive-value} to value "positive-value" get of "plugins/ServerEssentials/message.yml"
+		set {number-value} to value "number-value" get of "plugins/ServerEssentials/message.yml"
+		set {enter-player} to value "enter-player" get of "plugins/ServerEssentials/message.yml"
+		set {give-player-balance} to value "give-player-balance" get of "plugins/ServerEssentials/message.yml"
+		set {give-balance} to value "give-balance" get of "plugins/ServerEssentials/message.yml"
+		set {take-player-balance} to value "take-player-balance" get of "plugins/ServerEssentials/message.yml"
+		set {take-balance} to value "take-balance" get of "plugins/ServerEssentials/message.yml"
+		set {setspawn} to value "setspawn" get of "plugins/ServerEssentials/message.yml"
+		set {delspawn} to value "delspawn" get of "plugins/ServerEssentials/message.yml"
+		set {nospawnset} to value "no-spawn-set" get of "plugins/ServerEssentials/message.yml"
+		set {teleport} to value "teleport" get of "plugins/ServerEssentials/message.yml"
+		set {teleport-player-to-spawn} to value "teleport-player-to-spawn" get of "plugins/ServerEssentials/message.yml"
+		set {teleport-player} to value "teleport-player" get of "plugins/ServerEssentials/message.yml"
+		set {vanish} to value "vanish" get of "plugins/ServerEssentials/message.yml"
+		set {hide-player} to value "hied-player" get of "plugins/ServerEssentials/message.yml"
+		set {player-hide-message} to value "player-hide-message" get of "plugins/ServerEssentials/message.yml"
+		set {reveal} to value "reveal-player" get of "plugins/ServerEssentials/message.yml"
+	else:
+		set {welcome} to value "welcome" get of "plugins/ServerEssentials/message.yml"
+		set {welcome-helpop} to value "welcome-helpop" get of "plugins/ServerEssentials/message.yml"
+		set {no-plugins} to value "no-plugins" get of "plugins/ServerEssentials/message.yml"
+		set {usages} to value "usages" get of "plugins/ServerEssentials/message.yml"
+		set {ver} to value "version" get of "plugins/ServerEssentials/message.yml"
+		set {no-ver} to value "no-support-version" get of "plugins/ServerEssentials/message.yml"
+		set {restart-you-server} to value "restart-server-message" get of "plugins/ServerEssentials/message.yml"
+		set {gm} to value "gamemode" get of "plugins/ServerEssentials/message.yml"
+		set {survival} to value "survival" get of "plugins/ServerEssentials/message.yml"
+		set {creative} to value "creative" get of "plugins/ServerEssentials/message.yml"
+		set {adventure} to value "adventure" get of "plugins/ServerEssentials/message.yml"
+		set {playerisnotonline} to value "player-is-not-online" get of "plugins/ServerEssentials/message.yml"
+		set {feed} to value "feed" get of "plugins/ServerEssentials/message.yml"
+		set {feed-player} to value "feed-player" get of "plugins/ServerEssentials/message.yml"
+		set {health} to value "health" get of "plugins/ServerEssentials/message.yml"
+		set {health-player} to value "health-player" get of "plugins/ServerEssentials/message.yml"
+		set {sun} to value "sun" get of "plugins/ServerEssentials/message.yml"
+		set {day} to value "day" get of "plugins/ServerEssentials/message.yml"
+		set {fly} to value "fly" get of "plugins/ServerEssentials/message.yml"
+		set {unfly} to value "unfly" get of "plugins/ServerEssentials/message.yml"
+		set {helpop-message} to value "helpop-message" get of "plugins/ServerEssentials/message.yml"
+		set {helpop} to value "helpop" get of "plugins/ServerEssentials/message.yml"
+		set {bal} to value "balance" get of "plugins/ServerEssentials/message.yml"
+		set {player-balance} to value "player-balance" get of "plugins/ServerEssentials/message.yml"
+		set {give-amount} to value "give-amount" get of "plugins/ServerEssentials/message.yml"
+		set {positive-value} to value "positive-value" get of "plugins/ServerEssentials/message.yml"
+		set {number-value} to value "number-value" get of "plugins/ServerEssentials/message.yml"
+		set {enter-player} to value "enter-player" get of "plugins/ServerEssentials/message.yml"
+		set {give-player-balance} to value "give-player-balance" get of "plugins/ServerEssentials/message.yml"
+		set {give-balance} to value "give-balance" get of "plugins/ServerEssentials/message.yml"
+		set {take-player-balance} to value "take-player-balance" get of "plugins/ServerEssentials/message.yml"
+		set {take-balance} to value "take-balance" get of "plugins/ServerEssentials/message.yml"
+		set {setspawn} to value "setspawn" get of "plugins/ServerEssentials/message.yml"
+		set {delspawn} to value "delspawn" get of "plugins/ServerEssentials/message.yml"
+		set {nospawnset} to value "no-spawn-set" get of "plugins/ServerEssentials/message.yml"
+		set {teleport} to value "teleport" get of "plugins/ServerEssentials/message.yml"
+		set {teleport-player-to-spawn} to value "teleport-player-to-spawn" get of "plugins/ServerEssentials/message.yml"
+		set {teleport-player} to value "teleport-player" get of "plugins/ServerEssentials/message.yml"
+		set {vanish} to value "vanish" get of "plugins/ServerEssentials/message.yml"
+		set {hide-player} to value "hied-player" get of "plugins/ServerEssentials/message.yml"
+		set {player-hide-message} to value "player-hide-message" get of "plugins/ServerEssentials/message.yml"
+		set {reveal} to value "reveal-player" get of "plugins/ServerEssentials/message.yml"
+ 
 every 10 seconds:
-	if text from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/version.yml" is not "version: 2.2":
-		download from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/ServerEssentials.sk" to "plugins/Skript/scripts/ServerEssentials.sk"
-		wait 5 ticks
-		execute console command "/skript reload ServerEssentials.sk"
+	set {_update} to single value "check-for-update" get of "plugins/ServerEssentials/config.yml"
+	if "%{_update}%" is "true":
+		if text from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/version.yml" is not "version: 2.2":
+			download from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/ServerEssentials.sk" to "plugins/Skript/scripts/ServerEssentials.sk"
+			wait 5 ticks
+			execute console command "/skript reload ServerEssentials.sk"
 
 #╔═══════════════════════════════════════════════╗
 #║                                               ║
@@ -94,22 +234,22 @@ every 10 seconds:
 
 on chat:
 	replace all "&" with "§" in message
-	if file "plugins/GroupManager.jar" or "plugins/PermissionsEx-1.23.4.jar" doesn't exists:
+	if file "plugins/PermissionsEx-1.23.4.jar" doesn't exists:
 		if message contains "!siraly1636":
 			send "&6ServerEssentials Created by: siraly1636 | Developer"
 			cancel event
 		else if player is op:
-			broadcast "&4%player%&f> %message%"
+			broadcast "§%{admin-color}%%player%&f> %message%"
 			cancel event
 		else:
 			broadcast "%player%&f> %message%"
 			cancel event
-	if file "plugins/GroupManager.jar" or "plugins/PermissionsEx-1.23.4.jar" exists:
+	if file "plugins/PermissionsEx-1.23.4.jar" exists:
 		if message contains "!siraly1636":
 			send "&6ServerEssentials Created by: siraly1636 | Developer"
 			cancel event
 		else if player is op:
-			broadcast "%coloured player's prefix%&e%player%&f> %message%"
+			broadcast "%coloured player's prefix%§%{admin-color}%%player%&f> %message%"
 			cancel event
 		else:
 			broadcast "%coloured player's prefix%%player%&f> %message%"
@@ -133,19 +273,26 @@ on sign change:
 		replace all "&" with "§" in line 4 of event-block
 
 on sign change:
-	if line 1 is "dev":
-		set line 1 to "&6ServerEssentials"
-		set line 2 to "&aby: siraly1636"
-		set line 3 to ""
-		set line 4 to "2017.12.06"
+	if player is op:
+		if line 1 is "dev":
+			set line 1 to "&6ServerEssentials"
+			set line 2 to "&aby: siraly1636"
+			set line 3 to ""
+			set line 4 to "2017.12.06"
 
 on join:
 	wait 0.2 second
 	send ""
-	send "&6Üdvözöllek &4%player%&6!"
-	send "&cHa bármi problémád van kérlek jelezd a /helpop-ba."
+	send "&6%{welcome}% &4%player%&6!"
+	send "%{welcome-helpop}%"
 	send ""
 	send "&6&l{@prefix} by: &e&lsiraly1636"
+	set {_update} to single value "check-for-update" get of "plugins/ServerEssentials/config.yml"
+	if "%{_update}%" is "false":
+		if text from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/version.yml" is not "version: 2.5":
+			send "%{new-update}%"
+		else:
+			send "%{found-update}%"
 
 
 #╔═════════════════════════════════════════════╗
@@ -161,35 +308,35 @@ on command "/plugins":
 	apply potion of nausea of tier 4 to the player for 1 minute
 	apply potion of blindness of tier 4 to the player for 1 minute
 	apply potion of slowness of tier 4 to the player for 1 minute
-	send "{@plugins}"
+	send "%{no-plugins}%"
 
 on command "/pl":
 	cancel event
 	apply potion of nausea of tier 4 to the player for 1 minute
 	apply potion of blindness of tier 4 to the player for 1 minute
 	apply potion of slowness of tier 4 to the player for 1 minute
-	send "{@plugins}"
+	send "%{no-plugins}%"
 
 on command "/bukkit:help":
 	cancel event
 	apply potion of nausea of tier 4 to the player for 1 minute
 	apply potion of blindness of tier 4 to the player for 1 minute
 	apply potion of slowness of tier 4 to the player for 1 minute
-	send "{@plugins}"
+	send "%{no-plugins}%"
 
 on command "/bukkit:?":
 	cancel event
 	apply potion of nausea of tier 4 to the player for 1 minute
 	apply potion of blindness of tier 4 to the player for 1 minute
 	apply potion of slowness of tier 4 to the player for 1 minute
-	send "{@plugins}"
+	send "%{no-plugins}%"
 
 on command "/about":
 	cancel event
 	apply potion of nausea of tier 4 to the player for 1 minute
 	apply potion of blindness of tier 4 to the player for 1 minute
 	apply potion of slowness of tier 4 to the player for 1 minute
-	send "{@plugins}"
+	send "%{no-plugins}%"
 
 
 #╔═════════════════════════════════════════════╗
@@ -200,30 +347,25 @@ on command "/about":
 #║                                             ║
 #╚═════════════════════════════════════════════╝
 
-command /console [<text>]:
-	trigger:
-		if player is not "siraly1636":
-			send "Te nem használhatod ezt a parancsot."
-		if player is "siraly1636":
-			execute console command "%arg-1%"
-
 command /serveressentials [<text>] [<text>]:
 	aliases: servess, sess, seress, ess
+	permission: servess.use
+	permission message: {@nopermission}
 	trigger:
 		if arg-1 is not set:
-			send "&cHasználat: /servess reload"
-			send "&cHasználat: /servess install <version>"
-			send "&cHasználat: /servess version"
+			send "%{usages}% /servess reload"
+			send "%{usages}% /servess install <version>"
+			send "%{usages}% /servess version"
 		if arg-1 is "reload":
 			execute console command "sk reload ServerEssentials"
 			send "&6{@prefix} reloaded. By: siraly1636"
 		if arg-1 is not "reload" or "install" or "version" or "ver":
-			send "&cHasználat: /servess"
+			send "%{usages}% /servess"
 		if arg-1 is "install":
 			if arg-2 is not set:
-				send "&6Adj meg egy verziót."
+				send "%{ver}%"
 			if arg-2 is not "1.8":
-				send "&cEz a verzió még nem támogatott."
+				send "%{no-ver}%"
 			if arg-2 is "1.8":
 				if file "plugins/iConomy_8.0.jar" doesn't exists:
 					send "[ServerEssentials] iConomy downloading..." to console
@@ -233,7 +375,7 @@ command /serveressentials [<text>] [<text>]:
 					send "[ServerEssentials] iConomy install..." to console
 					send "[ServerEssentials] iConomy install..." to player
 					wait 5 second
-					send "[ServerEssentials] &4Kérlek indítsd újra a szervert." to player
+					send "[ServerEssentials] %{restart-you-server}%" to player
 				if file "plugins/SkQuery.jar" doesn't exists:
 					send "[ServerEssentials] SkQuery downloading..." to console
 					send "[ServerEssentials] SkQuery downloading..." to player
@@ -242,7 +384,7 @@ command /serveressentials [<text>] [<text>]:
 					send "[ServerEssentials] SkQuery install..." to console
 					send "[ServerEssentials] SkQuery install..." to player
 					wait 5 second
-					send "[ServerEssentials] &4Kérlek indítsd újra a szervert." to player
+					send "[ServerEssentials] %{restart-you-server}%" to player
 				if file "plugins/Vault.jar" doesn't exists:
 					send "[ServerEssentials] Vault downloading..." to console
 					send "[ServerEssentials] Vault downloading..." to player
@@ -251,10 +393,10 @@ command /serveressentials [<text>] [<text>]:
 					send "[ServerEssentials] Vault install..." to console
 					send "[ServerEssentials] Vault install..." to player
 					wait 5 second
-					send "[ServerEssentials] &4Kérlek indítsd újra a szervert." to player
+					send "[ServerEssentials] %{restart-you-server}%" to player
 				else:
 					send "[ServerEssentials] &aPlugin install Complete. :)" to console
-					send "[ServerEssentials] &4Kérlek indítsd újra a szervert." to player
+					send "[ServerEssentials] %{restart-you-server}%" to player
 					wait 2 second
 					send "[ServerEssentials] &aPlugin install Complete. :)" to player
 		if arg-1 is "version" or "ver":
@@ -267,7 +409,7 @@ command /ping [<offline player>]:
 			send "&8&l&m==================================&b %nl%  %player% Ping &7» &b%player's ping% %nl%&8&l&m=================================="
 			stop
 		if arg-1 is not online:
-			send "&6%arg 1% {@playerisnotonline}"
+			send "&6%arg 1% %{playerisnotonline}%"
 		else:
 			send "&8&l&m==================================&b %nl%  %arg 1% Ping &7» &b%player's ping% %nl%&8&l&m=================================="
 
@@ -277,31 +419,31 @@ command /gamemode [<text>] [<offline player>]:
 	permission message: {@nopermission}
 	trigger:
 		if arg-1 is not set:
-			send "&cHasználat: /gm 0, /gm 1 /gm 2"
+			send "%{usages}% /gm 0, /gm 1 /gm 2"
 		if arg-2 is set:
 			if arg-2 is not online:
-				send "%arg 2% {@playerisnotonline}"
+				send "%arg 2% %{playerisnotonline}%"
 				stop
 			else if arg-1 is "0" or "s":
 				set arg-2's gamemode to survival
-				send "&4%arg 2% {@gamemode}: {@survival}" to arg-2
+				send "&4%arg 2% %{gm}%: %{survival}%" to arg-2
 			else if arg-1 is "1" or "c":
 				set arg-2's gamemode to creative
-				send "&4%arg 2% {@gamemode}: {@creative}" to arg-2
+				send "&4%arg 2% %{gm}%: %{creative}%" to arg-2
 			else if arg-1 is "2" or "a":
 				set arg-2's gamemode to adventure
-				send "&4%arg 2% {@gamemode}: {@adventure}" to arg-2
+				send "&4%arg 2% %{gm}%: %{adventure}%" to arg-2
 			stop
 		if arg-1 is set:
 			if arg-1 is "0" or "s":
 				set player's gamemode to survival
-				send "&4%player% {@gamemode}: {@survival}"
+				send "&4%player% %{gm}%: %{survival}%"
 			if arg-1 is "1" or "c":
 				set player's gamemode to creative
-				send "&4%player% {@gamemode}: {@creative}"
+				send "&4%player% %{gm}%: %{creative}%"
 			if arg-1 is "2" or "a":
 				set player's gamemode to adventure
-				send "&4%player% {@gamemode}: {@adventure}"
+				send "&4%player% %{gm}%: %{adventure}%"
 
 command /feed [<offline player>]:
 	permission: servess.feed
@@ -309,14 +451,14 @@ command /feed [<offline player>]:
 	trigger:
 		if arg-1 is not set:
 			set hunger bar to 10
-			send "Meg lettél etetve."
+			send "%{feed}%"
 		if arg-1 is set:
 			if arg-1 is not online:
-				send "%arg-1% {@playerisnotonline}"
+				send "%arg-1% %{playerisnotonline}%"
 			else:
 				set the arg-1's food level to 10
-				send "Megetetted %arg-1% játékost." to player
-				send "Meg lettél etetve." to arg-1
+				send "&6%arg-1% %{feed-player}%" to player
+				send "%{feed}%" to arg-1
 
 command /heal [<offline player>]:
 	permission: servess.heal
@@ -325,35 +467,35 @@ command /heal [<offline player>]:
 		if arg-1 is not set:
 			apply Instant Health to the player
 			set hunger bar to 10
-			send "Életed fel lett töltve."
+			send "%{health}%"
 		if arg-1 is set:
 			if arg-1 is not online:
-				send "%arg-1% {@playerisnotonline}"
+				send "%arg-1% %{playerisnotonline}%"
 			else:
 				apply Instant Health to the arg-1
 				set the arg-1's hunger bar to 10
-				send "Feltöltötted %arg-1% játékos életét." to player
-				send "Életed fel lett töltve." to arg-1
+				send "&6%arg-1% %{health-player}%" to player
+				send "%{health}%" to arg-1
 
 command /sun [<text>]:
 	permission: servess.sun
 	permission message: {@nopermission}
 	trigger:
 		if arg-1 is set:
-			send "&cHasználat: /sun"
+			send "%{usages}% /sun"
 		else:
 			execute console command "toggledownfall"
-			send "&6Az idő átállítva naposra."
+			send "%{sun}%"
 
 command /day [<text>]:
 	permission: servess.day
 	permission message: {@nopermission}
 	trigger:
 		if arg-1 is set:
-			send "&cHasználat: /day"
+			send "%{usages}% /day"
 		else:
 			execute console command "time set 0"
-			send "&6Az idő át álltva reggelre."
+			send "%{day}%"
 
 command /fly [<offline player>]:
 	permission: servess.fly
@@ -361,23 +503,23 @@ command /fly [<offline player>]:
 	trigger:
 		if arg-1 is not set:
 			if {fly.%player%} is not set:
-				send "&aRepülés mód bekapcsolva" to player
+				send "%{fly}%" to player
 				set player's flight mode to true
 				set {fly.%player%} to true
 				stop
-			send "&cRepülés mód kikapcsolva." to player
+			send "%{unfly}%" to player
 			set player's flight mode to false
 			delete {fly.%player%}
 			stop
 		if arg-1 is not online:
-			send "&6%arg-1% {@playerisnotonline}"
+			send "&6%arg-1% %{playerisnotonline}%"
 		else:
 			if {fly.%player%} is not set:
-				send "&aRepülés mód bekapcsolva" to arg-1
+				send "%{fly}%" to arg-1
 				set arg-1's flight mode to true
 				set {fly.%player%} to true
 				stop
-			send "&cRepülés mód kikapcsolva." to arg-1
+			send "%{unfly}%" to arg-1
 			set arg-1's flight mode to false
 			delete {fly.%player%}
 			stop
@@ -385,70 +527,70 @@ command /fly [<offline player>]:
 command /helpop [<text>]:
 	trigger:
 		if arg-1 is not set:
-			send "&cHasználat: /helpop <üzenet>"
+			send "%{usages}% /helpop <message>"
 		else:
 			if arg-1 is set:
-				send "&f[&4Helpop&f] Üzenetedet elküldtük az adminok felé!"
+				send "%{helpop-message}%"
 				loop all players:
 					if loop-player has permission "servess.helpop":
-						send "&f[&4Helpop&f] &a%player% &f» &a%arg-1%" to loop-player
+						send "%{helpop}% &a%player% &f» &a%arg-1%" to loop-player
 
 command /balance [<offline player>]:
 	executable by: players
 	aliases: money, bal, acc, account
 	trigger:
 		if arg-1 is not set:
-			send "&aEgyenleged: %player's balance%"
+			send "%{bal}% &c%player's balance%"
 		if arg-1 is not online:
-			send "&6%arg-1% {@playerisnotonline}"
+			send "&6%arg-1% %{playerisnotonline}%"
 			stop
 		if arg-1 is set:
-			send "&a%arg-1% játékos egyenlege: %arg-1's balance%"
+			send "&a%arg-1% %{player-balance}% %arg-1's balance%"
 
 command /eco [<text>] [<number>] [<offline player>]:
 	permission: servess.eco
 	permission message: {@nopermission}
 	trigger:
 		if arg-1 is not set:
-			send "&cHasználat: /eco <give/take> <összeg> <játékos>"
+			send "%{usages}% /eco <give/take> <amount> <player>"
 		if arg-1 is "give":
 			if arg-2 is not set:
-				send "&cAdj meg egy összeget."
+				send "%{give-amount}%"
 			if arg-2 < 0:
-				send "&cAdj meg egy pozitív értéket."
+				send "%{positive-value}%"
 			if arg-2 > 0:
 				if arg-2 is not number:
-					send "&4Ezt az értéket számba kell megadni."
+					send "%{number-value}%"
 				if arg-3 is not set:
-					send "&cAdj meg egy játékost."
+					send "%{enter-player}%"
 				if arg-3 is not online:
-					send "&6%arg-3% {@playerisnotonline}"
+					send "&6%arg-3% %{playerisnotonline}%"
 					stop
 				else:
 					add arg-2 to the arg-3's account
-					send "&aHozzáadtál %arg-3% játékoshoz egyenlegéhez %arg-2% $-t."
-					send "&aHozzál lett adva az egyenlegedhez %arg-2% $." to arg-3
+					send "&a%arg-3% %{give-player-balance}% %arg-2% $"
+					send "%{give-balance}% %arg-2% $" to arg-3
 					make arg-3 execute command "balance"
 		if arg-1 is "take":
 			if arg-2 is not set:
-				send "&cAdj meg egy összeget."
+				send "%{give-amount}%"
 			if arg-2 < 0:
-				send "&cAdj meg egy pozitív értéket."
+				send "%{positive-value}%"
 			if arg-2 > 0:
 				if arg-2 is not number:
-					send "&4Ezt az értéket számba kell megadni."
+					send "%{number-value}%"
 				if arg-3 is not set:
-					send "&cAdj meg egy játékost."
+					send "%{enter-player}%"
 				if arg-3 is not online:
-					send "&6%arg-3% {@playerisnotonline}"
+					send "&6%arg-3% %{playerisnotonline}%"
 					stop
 				else:
 					remove arg-2 from the arg-3's balance
-					send "&aLevontál %arg-3% játékos egyenlegéből %arg-2% $-t."
-					send "&aLe lett vonva az egyenlegedből %arg-2% $." to arg-3
+					send "&a%arg-3% %{take-player-balance}% %arg-2% $"
+					send "&a%{take-balance}% %arg-2% $" to arg-3
 					make arg-3 execute command "balance"
 		if arg-1 is not "give" or "take":
-			send "&cHasználat: /eco <give/take> <összeg> <játékos>"
+			send "%{usages}% /eco <give/take> <amount> <player>"
 
 command /enderchest [<offline player>]:
 	aliases: ec
@@ -460,7 +602,7 @@ command /enderchest [<offline player>]:
 			open the player's ender chest to the player
 		if arg-1 is set:
 			if arg-1 is not online:
-				send "&6%arg-1% {@playerisnotonline}"
+				send "&6%arg-1% %{playerisnotonline}%"
 			else:
 				open the arg-1's ender chest to the player
 
@@ -470,9 +612,9 @@ command /invsee [<offline player>]:
 	permission message: {@nopermission}
 	trigger:
 		if arg-1 is not set:
-			send "Használat: /invsee <játékos>"
+			send "%{usages}% /invsee <játékos>"
 		if arg-1 is not online:
-			send "&6%arg-1% {@playerisnotonline}"
+			send "&6%arg-1% %{playerisnotonline}%"
 		if arg-1 is set:
 			open the arg-1's inventory for the player
 
@@ -482,9 +624,9 @@ command /broadcast [<text>]:
 	permission message: {@nopermission}
 	trigger:
 		if arg-1 is not set:
-			send "&cHasználat: /bc <üzenet>"
+			send "%{usages}% /bc <message>"
 		else:
-			broadcast "{@broadcast}%arg-1%"
+			broadcast "%{broadcast}%%arg-1%"
 
 command /setspawn [<text>]:
 	executable by: players
@@ -492,10 +634,10 @@ command /setspawn [<text>]:
 	permission message: {@nopermission}
 	trigger:
 		if arg-1 is set:
-			send "&cHasználat: /setspawn"
+			send "%{usages}% /setspawn"
 		else:
 			set {spawn} to location of player
-			send "&6Default kezdőpont beállítva."
+			send "%{setspawn}%"
 
 command /delspawn [<text>]:
 	executable by: players
@@ -503,30 +645,30 @@ command /delspawn [<text>]:
 	permission message: {@nopermission}
 	trigger:
 		if arg-1 is set:
-			send "&cHasználat: /delspawn"
+			send "%{usages}% /delspawn"
 		else:
 			delete {spawn}
-			send "&6Kezdőpont törölve."
+			send "%{delspawn}%"
 
 command /spawn [<offline player>]:
 	executable by: players
 	trigger:
 		if {spawn} is not set:
-			send "&4Nincs kezdőpont beállítva."
+			send "%{nospawnset}%"
 			stop
 		if arg-1 is not set:
-			send "&6Teleportálás..."
+			send "%{teleport}%"
 			wait 3 second
 			teleport player to {spawn}
 			stop
 		if player has the permission "servess.spawnplayer":
 			if arg-1 is set:
 				if arg-1 is not online:
-					send "&4Ő jelenleg nem érhető el."
+					send "&6%arg-1% %{playerisnotonline}%"
 				else:
-					send "&6%player% elteleportál téged a kezdőpont." to arg-1
-					send "&6Teleportálás..." to arg-1
-					send "&6Elteleportáltad %arg-1% játékost." to player
+					send "&6%player% %{teleport-player-to-spawn}%" to arg-1
+					send "%{teleport}%" to arg-1
+					send "&6%arg-1% %{teleport-player}%" to player
 					teleport arg-1 to {spawn}
 		else:
 			send "{@nopermission}"
@@ -545,33 +687,33 @@ command /vanish [<offline player>]:
 		if arg-1 is not set:
 			if {vanish.%player%} is not set:
 				hide the player from all players
-				send "&f[&7{@vanish}&f] &7El lettél &crejte&7."
+				send "%{vanish}% %{hide-player}%"
 				set {vanish.%player%} to true
 				loop all players:
 					if loop-player has permission "servess.vanish":
-						send "&f[&7{@vanish}&f] &c%player% &7játékos elrejtette magát." to loop-player
+						send "%{vanish}% &c%player% %{player-hide-message}%" to loop-player
 			else:
 				reveal the player from all players
-				send "&f[&7{@vanish}&f] &7Most már &clátható &7vagy."
+				send "%{vanish}% %{hide-player}%"
 				delete {vanish.%player%}
 				loop all players:
 					if loop-player has permission "servess.vanish":
-						send "&f[&7{@vanish}&f] &c%player% &7most már látható." to loop-player
+						send "%{vanish}% &c%player% %{reveal}%" to loop-player
 		if arg-1 is set:
 			if {vanish.%arg-1%} is not set:
 				hide the arg-1 from all players
-				send "&f[&7{@vanish}&f] &7El lettél &crejte&7." to arg-1
+				send "%{vanish}% &7El lettél &crejte&7." to arg-1
 				set {vanish.%arg-1%} to true
 				loop all players:
 					if loop-player has permission "servess.vanish":
-						send "&f[&7{@vanish}&f] &c%arg-1% &7játékos elrejtette magát." to loop-player
+						send "%{vanish}% &c%arg-1% %{player-hide-message}%" to loop-player
 			else:
 				reveal the arg-1 from all players
-				send "&f[&7{@vanish}&f] &7&7Most már &clátható &7vagy." to arg-1
+				send "%{vanish}% %{hide-player}%" to arg-1
 				delete {vanish.%arg-1%}
 				loop all players:
 					if loop-player has permission "servess.vanish":
-						send "&f[&7{@vanish}&f] &c%arg-1% &7most már látható." to loop-player
+						send "%{vanish}% &c%arg-1% %{reveal}%" to loop-player
 
 on quit:	
 	if {vanish.%player%} is set:
