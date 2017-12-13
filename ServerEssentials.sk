@@ -27,8 +27,10 @@
 
 options:
 	prefix: ServerEssentials
-	version: &av2.5 &4(Alpha)
+	version: &av2.6 &4(Alpha)
 	nopermission: §4You don't have permission.
+	#Developer
+	ver: version: 2.6
 
 
 #╔════════════════════════════╗
@@ -73,15 +75,15 @@ on load:
 		wf "##This is a Config file." to "plugins/ServerEssentials/config.yml"
 		wf "admin-color: 4" to "plugins/ServerEssentials/config.yml"
 		set "check-for-update" to "true" in yaml file "plugins/ServerEssentials/config.yml"
-		wf "Found update: §aNem található új verzió. :)" to "plugins/ServerEssentials/config.yml"
-		wf "New update: §cKérlek töltsd le az új verziót. https://github.com/siraly1636/ServerEssentials" to "plugins/ServerEssentials/config.yml"
+		wf "New update: §aNem található új verzió. :)" to "plugins/ServerEssentials/config.yml"
+		wf "Found update: §cKérlek töltsd le az új verziót. https://github.com/siraly1636/ServerEssentials" to "plugins/ServerEssentials/config.yml"
 		set {admin-color} to value "admin-color" get of "plugins/ServerEssentials/config.yml"
-		set {found-update} to value "Found update" get of "plugins/ServerEssentials/config.yml"
 		set {new-update} to value "New update" get of "plugins/ServerEssentials/config.yml"
+		set {found-update} to value "Found update" get of "plugins/ServerEssentials/config.yml"
 	else:
 		set {admin-color} to value "admin-color" get of "plugins/ServerEssentials/config.yml"
-		set {found-update} to value "Found update" get of "plugins/ServerEssentials/config.yml"
 		set {new-update} to value "New update" get of "plugins/ServerEssentials/config.yml"
+		set {found-update} to value "Found update" get of "plugins/ServerEssentials/config.yml"
 	if file "plugins/ServerEssentials/message.yml" doesn't exists:
 		create file "plugins/ServerEssentials/message.yml"
 		wf "##Language Hungarian | Nyelv Magyar" to "plugins/ServerEssentials/message.yml"
@@ -213,12 +215,7 @@ on load:
 		set {hide-player} to value "hide-player" get of "plugins/ServerEssentials/message.yml"
 		set {player-hide-message} to value "player-hide-message" get of "plugins/ServerEssentials/message.yml"
 		set {reveal} to value "reveal-player" get of "plugins/ServerEssentials/message.yml"
- 
-every 10 seconds:
-	if text from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/version.yml" is not "version: 2.5":
-		download from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/ServerEssentials.sk" to "plugins/Skript/scripts/ServerEssentials.sk"
-		wait 5 ticks
-		execute console command "/skript reload ServerEssentials.sk"
+
 
 #╔═══════════════════════════════════════════════╗
 #║                                               ║
@@ -276,7 +273,7 @@ on sign change:
 			set line 1 to "&6ServerEssentials"
 			set line 2 to "&aby: siraly1636"
 			set line 3 to ""
-			set line 4 to "2017.12.06"
+			set line 4 to "2017.12.13"
 
 on join:
 	wait 0.2 second
@@ -287,10 +284,10 @@ on join:
 	send "&6&l{@prefix} by: &e&lsiraly1636"
 	set {_update} to single value "check-for-update" get of "plugins/ServerEssentials/config.yml"
 	if "%{_update}%" is "false":
-		if text from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/version.yml" is not "version: 2.5":
-			send "%{new-update}%"
-		else:
+		if text from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/version.yml" is not "{@ver}":
 			send "%{found-update}%"
+		else:
+			send "%{new-update}%"
 
 
 #╔═════════════════════════════════════════════╗
@@ -357,7 +354,7 @@ command /serveressentials [<text>] [<text>]:
 		if arg-1 is "reload":
 			execute console command "sk reload ServerEssentials"
 			send "&6{@prefix} reloaded. By: siraly1636"
-		if arg-1 is not "reload" or "install" or "version" or "ver":
+		if arg-1 is not "reload" or "install" or "version" or "ver" or "update":
 			send "%{usages}% /servess"
 		if arg-1 is "install":
 			if arg-2 is not set:
@@ -399,6 +396,14 @@ command /serveressentials [<text>] [<text>]:
 					send "[ServerEssentials] &aPlugin install Complete. :)" to player
 		if arg-1 is "version" or "ver":
 			send "&6ServerEssentials version: {@version} &6by: siraly1636"
+		if arg-1 is "update":
+			if text from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/version.yml" is not "{@ver}":
+				download from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/ServerEssentials.sk" to "plugins/Skript/scripts/ServerEssentials.sk"
+				wait 5 ticks
+				execute console command "/skript reload ServerEssentials.sk"
+				send "&aNew version: {@version}"
+			else:
+				send "%{new-update}%"
 
 command /ping [<offline player>]:
 	aliases: p
@@ -482,7 +487,7 @@ command /sun [<text>]:
 		if arg-1 is set:
 			send "%{usages}% /sun"
 		else:
-			execute console command "toggledownfall"
+			set weather to sunny
 			send "%{sun}%"
 
 command /day [<text>]:
@@ -492,7 +497,7 @@ command /day [<text>]:
 		if arg-1 is set:
 			send "%{usages}% /day"
 		else:
-			execute console command "time set 0"
+			set time to 6:00
 			send "%{day}%"
 
 command /fly [<offline player>]:
@@ -533,7 +538,7 @@ command /helpop [<text>]:
 					if loop-player has permission "servess.helpop":
 						send "%{helpop}% &a%player% &f» &a%arg-1%" to loop-player
 
-command /balance [<offline player>]:
+command /balance [<offline player>] [<text>]:
 	executable by: players
 	aliases: money, bal, acc, account
 	trigger:
@@ -541,6 +546,9 @@ command /balance [<offline player>]:
 			send "%{bal}% &c%player's balance%"
 		if arg-1 is not online:
 			send "&6%arg-1% %{playerisnotonline}%"
+			stop
+		if arg-2 is set:
+			send "%{usages}% /balance"
 			stop
 		if arg-1 is set:
 			send "&a%arg-1% %{player-balance}% %arg-1's balance%"
