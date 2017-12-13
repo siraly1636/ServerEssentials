@@ -399,7 +399,7 @@ command /serveressentials [<text>] [<text>]:
 				download from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/ServerEssentials.sk" to "plugins/Skript/scripts/ServerEssentials.sk"
 				wait 5 ticks
 				execute console command "/skript reload ServerEssentials.sk"
-				send "&aNew version: {@version}"
+				send "&aNew version: v2.6 &4(Alpha)"
 			else:
 				send "%{new-update}%"
 
