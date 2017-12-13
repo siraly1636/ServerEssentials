@@ -29,8 +29,6 @@ options:
 	prefix: ServerEssentials
 	version: &av2.6 &4(Alpha)
 	nopermission: §4You don't have permission.
-	#Developer
-	ver: version: 2.6
 
 
 #╔════════════════════════════╗
@@ -284,7 +282,7 @@ on join:
 	send "&6&l{@prefix} by: &e&lsiraly1636"
 	set {_update} to single value "check-for-update" get of "plugins/ServerEssentials/config.yml"
 	if "%{_update}%" is "false":
-		if text from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/version.yml" is not "{@ver}":
+		if text from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/version.yml" is not "version: 2.6":
 			send "%{found-update}%"
 		else:
 			send "%{new-update}%"
@@ -397,7 +395,7 @@ command /serveressentials [<text>] [<text>]:
 		if arg-1 is "version" or "ver":
 			send "&6ServerEssentials version: {@version} &6by: siraly1636"
 		if arg-1 is "update":
-			if text from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/version.yml" is not "{@ver}":
+			if text from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/version.yml" is not "version: 2.6":
 				download from "https://raw.githubusercontent.com/siraly1636/ServerEssentials/master/ServerEssentials.sk" to "plugins/Skript/scripts/ServerEssentials.sk"
 				wait 5 ticks
 				execute console command "/skript reload ServerEssentials.sk"
